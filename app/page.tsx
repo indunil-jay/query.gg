@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useGetPosts } from "@/app/posts/_hooks/use-get-posts";
+import { useQueryState } from "nuqs";
 
 export default function Page() {
   const { data, error, isLoading } = useGetPosts();

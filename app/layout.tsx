@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "@/app/globals.css";
 import Providers from "@/app/query-provider";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -37,23 +37,25 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50">
-                <div className="flex flex-1 items-center gap-2 px-3">
-                  <SidebarTrigger />
-                  <Separator orientation="vertical" className="mr-2 h-4" />
-                  <BreadcrumbNav />
-                </div>
-              </header>
-              <main className="bg-muted  h-[calc(100vh-56px)] ">
-                {children}
-              </main>
-            </SidebarInset>
-          </SidebarProvider>
-        </Providers>
+        <NuqsAdapter>
+          <Providers>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50">
+                  <div className="flex flex-1 items-center gap-2 px-3">
+                    <SidebarTrigger />
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                    <BreadcrumbNav />
+                  </div>
+                </header>
+                <main className="bg-muted  h-[calc(100vh-56px)] ">
+                  {children}
+                </main>
+              </SidebarInset>
+            </SidebarProvider>
+          </Providers>
+        </NuqsAdapter>
       </body>
     </html>
   );
