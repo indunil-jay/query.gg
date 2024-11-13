@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import Providers from "./query-provider";
+import "@/app/globals.css";
+import Providers from "@/app/query-provider";
+import { AppSidebar } from "@/app/_components/app-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/app/_components/ui/sidebar";
+import { Separator } from "@/app/_components/ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./_components/ui/breadcrumb";
 
 const geistSans = localFont({
   src: "./_fonts/GeistVF.woff",
@@ -28,7 +43,39 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50">
+                <div className="flex flex-1 items-center gap-2 px-3">
+                  <SidebarTrigger />
+                  <Separator orientation="vertical" className="mr-2 h-4" />
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbPage className="line-clamp-1">
+                          Posts
+                        </BreadcrumbPage>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbPage className="line-clamp-1">
+                          1
+                        </BreadcrumbPage>
+                      </BreadcrumbItem>
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
+              </header>
+              <main className="bg-muted  h-[calc(100vh-56px)] ">
+                {children}
+              </main>
+            </SidebarInset>
+          </SidebarProvider>
+        </Providers>
       </body>
     </html>
   );
