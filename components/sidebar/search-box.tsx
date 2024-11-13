@@ -20,7 +20,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@/app/_components/ui/command";
+} from "@/components/ui/command";
 
 export function SearchBox() {
   const [open, setOpen] = React.useState(false);

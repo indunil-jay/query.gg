@@ -1,40 +1,24 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/_components/ui/avatar";
-import { Button } from "@/app/_components/ui/button";
+import { Bookmark, MessageCircle, Share } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/app/_components/ui/card";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
-import { IPost } from "@/app/types/post";
-import { useQuery } from "@tanstack/react-query";
-import { Bookmark, MessageCircle, Share } from "lucide-react";
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useGetPost } from "@/app/posts/_hooks/use-get-post";
 
 interface PostProps {
   id: string;
 }
 
 export const Post = ({ id }: PostProps) => {
-  console.log({ id });
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["book", id],
-    queryFn: async () => {
-      const response = await fetch(`https://dummyjson.com/posts/${id}`);
-      if (!response.ok) {
-        throw new Error("Error fetching data");
-      }
-      const data = await response.json();
-      return data as Promise<IPost>;
-    },
-  });
+  const { data, error, isLoading } = useGetPost({ id });
 
   if (isLoading) {
     return <p>Loading...</p>;

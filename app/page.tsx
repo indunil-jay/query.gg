@@ -1,7 +1,8 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { IPost } from "./types/post";
+import Link from "next/link";
+import { Bookmark, MessageCircle, Share } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -9,25 +10,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./_components/ui/card";
-import { cn } from "./_lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "./_components/ui/avatar";
-import { Button } from "./_components/ui/button";
-import { MessageCircle } from "lucide-react";
-import Link from "next/link";
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useGetPosts } from "@/app/posts/_hooks/use-get-posts";
 
 export default function Page() {
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["books"],
-    queryFn: async () => {
-      const response = await fetch("https://dummyjson.com/posts");
-      if (!response.ok) {
-        throw new Error("Error fetching data");
-      }
-      const data = await response.json();
-      return data.posts as Promise<IPost[]>;
-    },
-  });
+  const { data, error, isLoading } = useGetPosts();
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -69,10 +59,20 @@ export default function Page() {
               <p className="text-sm line-clamp-3">{post.body}</p>
             </CardContent>
             <CardFooter className="px-3.5 py-1  flex justify-end">
-              <Button variant={"ghost"} className="">
-                <MessageCircle className="size-4" />
-                comments
-              </Button>
+              <div className="flex">
+                <Button variant={"ghost"} size={"sm"}>
+                  <MessageCircle className="size-4" />
+                  comments
+                </Button>
+                <Button variant={"ghost"} size={"sm"}>
+                  <Bookmark className="size-4" />
+                  bookmark
+                </Button>
+                <Button variant={"ghost"} size={"sm"}>
+                  <Share className="size-4" />
+                  share
+                </Button>
+              </div>
             </CardFooter>
           </Card>
         ))}

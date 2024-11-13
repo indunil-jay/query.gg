@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Command } from "lucide-react";
 
-import { NavMain } from "@/app/_components/sidebar/nav-main";
+import { NavMain } from "@/components/sidebar/nav-main";
 import {
   Sidebar,
   SidebarContent,
@@ -12,7 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/app/_components/ui/sidebar";
+} from "@/components/ui/sidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (

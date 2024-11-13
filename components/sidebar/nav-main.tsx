@@ -4,8 +4,8 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-} from "@/app/_components/ui/sidebar";
-import { SearchBox } from "@/app/_components/sidebar/search-box";
+} from "@/components/ui/sidebar";
+import { SearchBox } from "@/components/sidebar/search-box";
 
 export function NavMain() {
   return (
