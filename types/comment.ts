@@ -9,7 +9,7 @@ export interface IComment {
 }
 
 export interface ICommentResponse {
-  comments: IComment[];
+  comments: IComment[] | [];
   total: number;
   skip: number;
   limit: number;

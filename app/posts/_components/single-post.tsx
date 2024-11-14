@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, MessageCircle, Share } from "lucide-react";
+import { Bookmark, MessageCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,45 +11,49 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useGetPost } from "@/hooks/custom/use-get-post";
 import { useGetUser } from "@/hooks/custom/use-user";
 import { Badge } from "@/components/ui/badge";
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Comments } from "@/components/comments";
 import { CopyToClipboardBtn } from "@/components/copy-to-clipboard-btn";
+import { usePostDetails } from "../_hooks/use-post-details";
 
-interface PostProps {
-  id: string;
-}
+export const Post = ({ postId }: { postId: string }) => {
+  const {
+    post,
+    comments,
+    isCommentsError,
+    isCommentsPending,
+    isPostPending,
+    postStatus,
+  } = usePostDetails({ postId });
 
-export const Post = ({ id }: PostProps) => {
-  const { data, error, isLoading } = useGetPost({ id });
-
-  const { data: user, isLoading: isUserLoading } = useGetUser({
-    id: data?.userId,
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    status,
+  } = useGetUser({
+    id: post?.id,
   });
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  if (isPostPending || postStatus === "pending") return "loading";
 
-  if (error) {
-    return <p>Error loading data: {error.message}</p>;
-  }
+  if (postStatus === "error" || !post) return "Error";
 
-  if (!data) return;
-
-  if (!user) return;
-  const fullName = user.firstName + " " + user.lastName;
+  const fullName = user ? `${user.firstName} ${user.lastName}` : "Anonymous";
   return (
     <div className="h-full p-4">
       <Card className="h-[calc(100vh-(32px+56px))]">
         <CardHeader>
           <CardTitle className="text-4xl line-clamp-2 hover:line-clamp-none cursor-pointer">
-            {data.title}
+            {post.title}
           </CardTitle>
           <div className="flex gap-2">
-            {data.tags.map((tag) => (
+            {post.tags.map((tag) => (
               <Badge
                 key={tag}
                 variant="outline"
@@ -61,19 +65,25 @@ export const Post = ({ id }: PostProps) => {
           </div>
           <div className="flex items-center gap-5">
             <div>
-              <Avatar className="size-10">
-                <AvatarImage src={user.image} alt={fullName} />
-                <AvatarFallback>
-                  {user.firstName.charAt(0).toUpperCase() +
-                    user.lastName.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+              {!(status === "success") ? (
+                "fetching..."
+              ) : (
+                <>
+                  <Avatar className="size-10">
+                    <AvatarImage src={user.image} alt={user?.email} />
+                    <AvatarFallback>
+                      {user.firstName.charAt(0).toUpperCase() +
+                        user.lastName.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </>
+              )}
             </div>
             <div className="">
               <p className="font-semibold text-sm capitalize text-muted-foreground">
                 {fullName}
               </p>
-              <p className="text-xs text-muted-foreground/70">{user.email}</p>
+              <p className="text-xs text-muted-foreground/70">{user?.email}</p>
             </div>
           </div>
         </CardHeader>
@@ -82,17 +92,17 @@ export const Post = ({ id }: PostProps) => {
             <Avatar className="w-full h-full rounded-md">
               <AvatarImage
                 className="w-full h-full rounded-md"
-                src={data.imageUrl}
-                alt={data.title}
+                src={post.imageUrl}
+                alt={post.title}
               />
               <AvatarFallback className="w-full h-full rounded-md text-8xl">
-                {data.title.charAt(0).toUpperCase()}
+                {post.title.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
 
             <div className="">
               <ScrollArea className="h-72 p-4">
-                <p className="">{data?.body}</p>
+                <p className="">{post?.body}</p>
               </ScrollArea>
             </div>
           </div>
@@ -106,13 +116,25 @@ export const Post = ({ id }: PostProps) => {
                   comments
                 </Button>
               </PopoverTrigger>
-              <Comments postId={data.id} />
+              {!comments ? (
+                <PopoverContent align="center" className="w-96">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    No Comments
+                  </p>
+                </PopoverContent>
+              ) : (
+                <Comments
+                  commentsResponse={comments}
+                  isCommentsError={isCommentsError}
+                  isCommentsPending={isCommentsPending}
+                />
+              )}
             </Popover>
             <Button variant={"ghost"} className="">
               <Bookmark className="size-4" />
               bookmark
             </Button>
-            <CopyToClipboardBtn postId={data.id} />
+            <CopyToClipboardBtn postId={post?.id} />
           </div>
         </CardFooter>
       </Card>

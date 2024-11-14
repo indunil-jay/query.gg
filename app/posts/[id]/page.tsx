@@ -7,5 +7,5 @@ export default async function Page({
 }) {
   const { id } = await params;
 
-  return <Post id={id.toString()} />;
+  return <Post postId={id} />;
 }

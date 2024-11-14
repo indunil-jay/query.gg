@@ -6,7 +6,7 @@ export const useSearchPosts = () => {
   const [query] = useQueryState("search", parseAsString);
 
   return useQuery({
-    queryKey: ["posts-search", query],
+    queryKey: ["posts:search", query],
     queryFn: async () => {
       const response = await fetch(
         `https://dummyjson.com/posts/search?q=${query}&limit=5`

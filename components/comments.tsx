@@ -1,28 +1,53 @@
 import { PopoverContent } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useGetComments } from "@/hooks/custom/use-get-comments";
 import { useGetUser } from "@/hooks/custom/use-user";
-import { IComment } from "@/types/comment";
+import { IComment, ICommentResponse } from "@/types/comment";
+import { Loader } from "lucide-react";
 
-export const Comments = ({ postId }: { postId: string }) => {
-  const { data, isLoading } = useGetComments({ id: postId });
-  if (!data || !(data.comments.length > 0)) {
+interface CommentProps {
+  commentsResponse: ICommentResponse;
+  isCommentsError: boolean;
+  isCommentsPending: boolean;
+}
+
+export const Comments = ({
+  commentsResponse,
+  isCommentsError,
+  isCommentsPending,
+}: CommentProps) => {
+  if (isCommentsError) {
     return (
       <PopoverContent align="center" className="w-96">
-        <p className="text-sm font-medium text-muted-foreground">No Comments</p>
+        <p className="text-sm font-medium text-muted-foreground">
+          Error while comment loading
+        </p>
+      </PopoverContent>
+    );
+  }
+
+  if (isCommentsPending) {
+    return (
+      <PopoverContent align="center" className="w-96">
+        <p className="text-sm font-medium text-muted-foreground">
+          Comments ( <Loader className="animate-spin" />)
+        </p>
+        <ScrollArea className="h-[200px] p-4">
+          <div className="space-y-3">
+            <Loader className="animate-spin" />
+          </div>
+        </ScrollArea>
       </PopoverContent>
     );
   }
   return (
     <PopoverContent align="center" className="w-96">
       <p className="text-sm font-medium text-muted-foreground">
-        Comments ({data.total})
+        Comments ({commentsResponse.total})
       </p>
       <ScrollArea className="h-[200px] p-4">
-        {isLoading && "loadig comments"}
         <div className="space-y-3">
-          {data.comments.map((comment) => (
+          {commentsResponse.comments.map((comment) => (
             <CommentCard key={comment.id} comment={comment} />
           ))}
         </div>
