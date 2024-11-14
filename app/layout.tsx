@@ -52,7 +52,7 @@ export default function RootLayout({
                       <BreadcrumbNav />
                     </div>
                   </header>
-                  <main className="bg-muted  h-[calc(100vh-56px)] ">
+                  <main className="bg-muted min-h-[calc(100vh-56px)] flex flex-col justify-between">
                     {children}
                   </main>
                 </SidebarInset>

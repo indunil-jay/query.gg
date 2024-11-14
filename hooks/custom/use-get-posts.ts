@@ -1,13 +1,14 @@
-import { orderValues } from "@/components/sidebar/sort-nav";
-import { IPost } from "@/types/post";
 import { useQuery } from "@tanstack/react-query";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
+
+import { orderValues } from "@/components/sidebar/sort-nav";
+import { IPostResponse } from "@/types/post";
 
 export const useGetPosts = () => {
   const [order] = useQueryState("order", parseAsStringLiteral(orderValues));
   const [sortBy] = useQueryState("sortBy", parseAsString);
 
-  let url: string = `https://dummyjson.com/posts`;
+  let url: string = `https://dummyjson.com/posts?limit=9`;
 
   if (sortBy && order) {
     url += `?sortBy=${sortBy}&order=${order}`;
@@ -21,7 +22,8 @@ export const useGetPosts = () => {
         throw new Error("Error fetching data");
       }
       const data = await response.json();
-      return data.posts as IPost[];
+      const postsResponse = data as IPostResponse;
+      return postsResponse;
     },
   });
 };

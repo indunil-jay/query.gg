@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import {
   Card,
   CardContent,
@@ -11,18 +10,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Bookmark, MessageCircle, Share } from "lucide-react";
 import { IPost } from "@/types/post";
 import { useGetUser } from "@/hooks/custom/use-user";
 import { Badge } from "./ui/badge";
-import { Comments } from "./comments";
 import { CopyToClipboardBtn } from "./copy-to-clipboard-btn";
+import { Spinner } from "./loader";
+import { Error } from "./error";
+import { Loader } from "lucide-react";
 
 export const PostCard = ({ post }: { post: IPost }) => {
-  const { data: user, isLoading } = useGetUser({ id: post.userId });
-  if (!user) return;
-  const fullName = user.firstName + " " + user.lastName;
+  const { data: user, status, isLoading } = useGetUser({ id: post.userId });
+
+  if (status === "error") {
+    return (
+      <div className="flex items-center w-full h-full justify-center">
+        <Error message="Something went while fetching user." />
+      </div>
+    );
+  }
+
   return (
     <Card className={cn("min-w-[320px] py-2")}>
       <CardHeader className="px-3.5 py-1">
@@ -43,7 +49,11 @@ export const PostCard = ({ post }: { post: IPost }) => {
               <CardTitle className="line-clamp-2">{post.title}</CardTitle>
             </Link>
             <CardDescription className="line-clamp-1 text-xs">
-              written by • {fullName}
+              {status === "pending" || isLoading ? (
+                <Loader className="size-2" />
+              ) : (
+                <span>{`${user.firstName} ${user.lastName}`}</span>
+              )}
             </CardDescription>
             <div className="flex gap-2">
               {post.tags.map((tag) => (
@@ -64,20 +74,6 @@ export const PostCard = ({ post }: { post: IPost }) => {
       </CardContent>
       <CardFooter className="px-3.5 py-1  flex justify-end">
         <div className="flex">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant={"ghost"} size={"sm"}>
-                <MessageCircle className="size-4" />
-                comments
-              </Button>
-            </PopoverTrigger>
-            <Comments postId={post.id} />
-          </Popover>
-
-          <Button variant={"ghost"} size={"sm"}>
-            <Bookmark className="size-4" />
-            bookmark
-          </Button>
           <CopyToClipboardBtn postId={post.id} />
         </div>
       </CardFooter>
