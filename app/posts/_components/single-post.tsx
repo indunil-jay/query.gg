@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, MessageCircle } from "lucide-react";
+import { Bookmark, Loader, MessageCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useGetUser } from "@/hooks/custom/use-user";
 import { Badge } from "@/components/ui/badge";
 import {
   Popover,
@@ -21,28 +20,31 @@ import {
 import { Comments } from "@/components/comments";
 import { CopyToClipboardBtn } from "@/components/copy-to-clipboard-btn";
 import { usePostDetails } from "../_hooks/use-post-details";
+import { useUser } from "@/hooks/custom/use-user";
+import { usePost } from "@/hooks/custom/use-post";
 
 export const Post = ({ postId }: { postId: string }) => {
-  const {
-    post,
-    comments,
-    isCommentsError,
-    isCommentsPending,
-    isPostPending,
-    postStatus,
-  } = usePostDetails({ postId });
+  // const {
+  //   post,
+  //   comments,
+  //   isCommentsError,
+  //   isCommentsPending,
+  //   isPostPending,
+  //   postStatus,
+  // } = usePostDetails({ postId });
+  const { data: post, isPlaceholderData, isError } = usePost({ postId });
 
   const {
     data: user,
     isLoading: isUserLoading,
     status,
-  } = useGetUser({
+  } = useUser({
     id: post?.id,
   });
 
-  if (isPostPending || postStatus === "pending") return "loading";
+  if (isError) return "Error";
 
-  if (postStatus === "error" || !post) return "Error";
+  if (!post) return;
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : "Anonymous";
   return (
@@ -102,7 +104,11 @@ export const Post = ({ postId }: { postId: string }) => {
 
             <div className="">
               <ScrollArea className="h-72 p-4">
-                <p className="">{post?.body}</p>
+                {isPlaceholderData ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  <p className="">{post?.body}</p>
+                )}
               </ScrollArea>
             </div>
           </div>
@@ -116,7 +122,7 @@ export const Post = ({ postId }: { postId: string }) => {
                   comments
                 </Button>
               </PopoverTrigger>
-              {!comments ? (
+              {/* {!comments ? (
                 <PopoverContent align="center" className="w-96">
                   <p className="text-sm font-medium text-muted-foreground">
                     No Comments
@@ -128,7 +134,7 @@ export const Post = ({ postId }: { postId: string }) => {
                   isCommentsError={isCommentsError}
                   isCommentsPending={isCommentsPending}
                 />
-              )}
+              )} */}
             </Popover>
             <Button variant={"ghost"} className="">
               <Bookmark className="size-4" />

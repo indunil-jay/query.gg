@@ -1,8 +1,8 @@
 import { IPost } from "@/types/post";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const getPost = (postId: string) => ({
-  queryKey: ["book", { postId }],
+  queryKey: ["posts", { postId }],
   queryFn: async () => {
     const response = await fetch(`https://dummyjson.com/posts/${postId}`);
     if (!response.ok) {
@@ -12,7 +12,18 @@ export const getPost = (postId: string) => ({
     return data as Promise<IPost>;
   },
   enabled: Boolean(postId),
+  staleTime: 5000,
 });
 
-export const usePost = ({ postId }: { postId: string }) =>
-  useQuery({ ...getPost(postId) });
+export const usePost = ({ postId }: { postId: string }) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    ...getPost(postId),
+    initialData: () => {
+      console.log("cache query:", queryClient.getQueryData(["posts"]));
+      return (queryClient.getQueryData(["posts"]) as IPost[])?.find(
+        (post) => post.id === postId
+      );
+    },
+  });
+};

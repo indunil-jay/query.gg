@@ -1,7 +1,7 @@
 import { PopoverContent } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useGetUser } from "@/hooks/custom/use-user";
+import { useUser } from "@/hooks/custom/use-user";
 import { IComment, ICommentResponse } from "@/types/comment";
 import { Loader } from "lucide-react";
 
@@ -57,7 +57,7 @@ export const Comments = ({
 };
 
 export const CommentCard = ({ comment }: { comment: IComment }) => {
-  const { data: user, isLoading } = useGetUser({ id: comment.user.id });
+  const { data: user, isLoading } = useUser({ id: comment.user.id });
   if (!user) return;
   return (
     <div className="space-y-2">

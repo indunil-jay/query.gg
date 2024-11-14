@@ -2,10 +2,10 @@ import { IPost } from "@/types/post";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "../ui/badge";
-import { useGetUser } from "@/hooks/custom/use-user";
+import { useUser } from "@/hooks/custom/use-user";
 
 export const SearchResultItem = ({ post }: { post: IPost }) => {
-  const { data: user, isLoading } = useGetUser({ id: post.userId });
+  const { data: user, isLoading } = useUser({ id: post.userId });
   if (!user) return;
   const fullName = user.firstName + " " + user.lastName;
   return (

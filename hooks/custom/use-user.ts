@@ -1,7 +1,7 @@
 import { IUser } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetUser = ({ id }: { id: string | undefined }) =>
+export const useUser = ({ id }: { id: string | undefined }) =>
   useQuery({
     queryKey: ["author", { id }],
     queryFn: async () => {

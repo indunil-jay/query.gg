@@ -1,10 +1,18 @@
 import { getComments } from "@/hooks/custom/use-comments";
 import { getPost } from "@/hooks/custom/use-post";
+import { ICommentResponse } from "@/types/comment";
+import { IPost } from "@/types/post";
 import { useQueries } from "@tanstack/react-query";
+
+export const getPostDetails = (postId: string) => [
+  { ...getPost(postId) },
+  { ...getComments(postId) },
+];
 
 export const usePostDetails = ({ postId }: { postId: string }) => {
   return useQueries({
-    queries: [{ ...getPost(postId) }, { ...getComments(postId) }],
+    queries: [...getPostDetails(postId)],
+
     combine: (queries) => {
       const isPending = queries.some((query) => query.status === "pending");
       const isError = queries.some((query) => query.status === "error");
@@ -15,8 +23,9 @@ export const usePostDetails = ({ postId }: { postId: string }) => {
       const isCommentsPending = commentsQuery.isPending;
       const isCommentsError = commentsQuery.isError;
 
-      const post = postQuery.data;
-      const comments = commentsQuery.data;
+      const post: IPost = postQuery.data as IPost;
+      const isPostPlaceHolder = postQuery.isPlaceholderData;
+      const comments: ICommentResponse = commentsQuery.data as ICommentResponse;
 
       const postStatus = postQuery.status;
       const commentsStatus = commentsQuery.status;
@@ -32,6 +41,7 @@ export const usePostDetails = ({ postId }: { postId: string }) => {
         isCommentsError,
         isPending,
         isError,
+        isPostPlaceHolder,
       };
     },
   });

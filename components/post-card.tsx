@@ -11,15 +11,18 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IPost } from "@/types/post";
-import { useGetUser } from "@/hooks/custom/use-user";
+import { useUser } from "@/hooks/custom/use-user";
 import { Badge } from "./ui/badge";
 import { CopyToClipboardBtn } from "./copy-to-clipboard-btn";
-import { Spinner } from "./loader";
 import { Error } from "./error";
 import { Loader } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { getPost } from "@/hooks/custom/use-post";
 
 export const PostCard = ({ post }: { post: IPost }) => {
-  const { data: user, status, isLoading } = useGetUser({ id: post.userId });
+  const { data: user, status, isLoading } = useUser({ id: post.userId });
+
+  const queryClient = useQueryClient();
 
   if (status === "error") {
     return (
@@ -45,6 +48,9 @@ export const PostCard = ({ post }: { post: IPost }) => {
             <Link
               href={`http://localhost:3000/posts/${post.id}`}
               className="hover:underline underline-offset-2 transition"
+              onMouseEnter={() => {
+                queryClient.prefetchQuery(getPost(post.id.toString()));
+              }}
             >
               <CardTitle className="line-clamp-2">{post.title}</CardTitle>
             </Link>

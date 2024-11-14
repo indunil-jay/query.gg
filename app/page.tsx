@@ -1,14 +1,14 @@
 "use client";
 
 import { RefreshCcw } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useGetPosts } from "@/hooks/custom/use-get-posts";
-import { useState } from "react";
 import { PostCard } from "@/components/post-card";
 import { Spinner } from "@/components/loader";
 import { Error } from "@/components/error";
+import { usePosts } from "@/hooks/custom/use-posts";
 
 export default function Page() {
   const {
@@ -17,7 +17,7 @@ export default function Page() {
     isLoading,
     isFetching,
     refetch,
-  } = useGetPosts();
+  } = usePosts();
   const [lastFetched, setLastFetched] = useState(new Date());
 
   if (status === "pending" || isLoading) {
