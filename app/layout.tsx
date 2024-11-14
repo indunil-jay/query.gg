@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { BreadcrumbNav } from "@/components/bread-crumb-nav";
+import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./_fonts/GeistVF.woff",
@@ -37,25 +38,27 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NuqsAdapter>
-          <Providers>
-            <SidebarProvider>
-              <AppSidebar />
-              <SidebarInset>
-                <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50">
-                  <div className="flex flex-1 items-center gap-2 px-3">
-                    <SidebarTrigger />
-                    <Separator orientation="vertical" className="mr-2 h-4" />
-                    <BreadcrumbNav />
-                  </div>
-                </header>
-                <main className="bg-muted  h-[calc(100vh-56px)] ">
-                  {children}
-                </main>
-              </SidebarInset>
-            </SidebarProvider>
-          </Providers>
-        </NuqsAdapter>
+        <Suspense>
+          <NuqsAdapter>
+            <Providers>
+              <SidebarProvider>
+                <AppSidebar />
+                <SidebarInset>
+                  <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50">
+                    <div className="flex flex-1 items-center gap-2 px-3">
+                      <SidebarTrigger />
+                      <Separator orientation="vertical" className="mr-2 h-4" />
+                      <BreadcrumbNav />
+                    </div>
+                  </header>
+                  <main className="bg-muted  h-[calc(100vh-56px)] ">
+                    {children}
+                  </main>
+                </SidebarInset>
+              </SidebarProvider>
+            </Providers>
+          </NuqsAdapter>
+        </Suspense>
       </body>
     </html>
   );

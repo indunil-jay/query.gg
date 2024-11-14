@@ -20,7 +20,7 @@ const MAX_RECENT_ITEMS = 3;
 
 export function SearchBox() {
   const [open, setOpen] = React.useState(false);
-  const [query, setQuery] = useQueryState("search");
+  const [, setQuery] = useQueryState("search");
   const { data: searchResults, isLoading } = useSearchPosts();
   const [recentPosts, setRecentPosts] = React.useState<IPost[]>([]);
   const router = useRouter();
@@ -41,7 +41,6 @@ export function SearchBox() {
     const selectedPost = [...(searchResults ?? []), ...recentPosts].find(
       (post) => post.id === id
     );
-    console.log("Selected Post:", selectedPost);
     if (selectedPost) {
       // Add to recent posts if not already present
       const updatedRecentPosts = [selectedPost, ...recentPosts]
@@ -66,7 +65,7 @@ export function SearchBox() {
     if (!open && !recentPosts) {
       setQuery(null);
     }
-  }, [open, setQuery]);
+  }, [open, setQuery, recentPosts]);
 
   // Handle keyboard shortcut to toggle search dialog
   React.useEffect(() => {

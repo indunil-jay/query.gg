@@ -26,8 +26,8 @@ export const BreadcrumbNav = () => {
         </BreadcrumbItem>
 
         {breadcrumbs.length > 0 &&
-          breadcrumbs.map((breadcrumb, index) => (
-            <React.Fragment key={breadcrumb.href}>
+          breadcrumbs.map((breadcrumb) => (
+            <React.Fragment key={breadcrumb.label}>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink href={breadcrumb.href}>

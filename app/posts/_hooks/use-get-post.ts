@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetPost = ({ id }: { id: string }) =>
   useQuery({
-    queryKey: ["book", id],
+    queryKey: ["book", { id }],
     queryFn: async () => {
       const response = await fetch(`https://dummyjson.com/posts/${id}`);
       if (!response.ok) {

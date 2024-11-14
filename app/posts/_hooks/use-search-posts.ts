@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { parseAsString, useQueryState } from "nuqs";
 
 export const useSearchPosts = () => {
-  const [query, setQuery] = useQueryState("search", parseAsString);
+  const [query] = useQueryState("search", parseAsString);
 
   return useQuery({
     queryKey: ["posts-search", query],

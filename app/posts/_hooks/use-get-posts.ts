@@ -14,7 +14,7 @@ export const useGetPosts = () => {
   }
 
   return useQuery({
-    queryKey: ["posts", { sortBy, order }],
+    queryKey: ["posts", { sortBy, order, url }],
     queryFn: async () => {
       const response = await fetch(url);
       if (!response.ok) {

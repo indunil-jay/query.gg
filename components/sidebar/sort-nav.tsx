@@ -19,11 +19,11 @@ import { useCallback } from "react";
 export const orderValues = ["asc", "desc"] as const;
 
 export default function SortNav() {
-  const [order, setOrder] = useQueryState(
+  const [, setOrder] = useQueryState(
     "order",
     parseAsStringLiteral(orderValues)
   );
-  const [sortBy, setSortBy] = useQueryState("sortBy", parseAsString);
+  const [, setSortBy] = useQueryState("sortBy", parseAsString);
 
   const handleOnChangeEvent = useCallback(
     (value: string) => {
