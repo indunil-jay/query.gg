@@ -2,7 +2,7 @@ import { IPost } from "@/types/post";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "../ui/badge";
-import { useGetUser } from "@/app/users/_hooks/use-user";
+import { useGetUser } from "@/hooks/custom/use-user";
 
 export const SearchResultItem = ({ post }: { post: IPost }) => {
   const { data: user, isLoading } = useGetUser({ id: post.userId });

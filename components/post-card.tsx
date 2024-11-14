@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Bookmark, MessageCircle, Share } from "lucide-react";
 import { IPost } from "@/types/post";
-import { useGetUser } from "@/app/users/_hooks/use-user";
+import { useGetUser } from "@/hooks/custom/use-user";
 import { Badge } from "./ui/badge";
 import { Comments } from "./comments";
 import { CopyToClipboardBtn } from "./copy-to-clipboard-btn";

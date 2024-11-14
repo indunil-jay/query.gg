@@ -1,4 +1,4 @@
-import { Post } from "@/app/posts/[id]/single-post";
+import { Post } from "@/app/posts/_components/single-post";
 
 export default async function Page({
   params,

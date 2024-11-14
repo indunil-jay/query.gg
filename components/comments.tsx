@@ -1,8 +1,8 @@
 import { PopoverContent } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useGetComments } from "@/app/comments/_hooks/use-get-comments";
-import { useGetUser } from "@/app/users/_hooks/use-user";
+import { useGetComments } from "@/hooks/custom/use-get-comments";
+import { useGetUser } from "@/hooks/custom/use-user";
 import { IComment } from "@/types/comment";
 
 export const Comments = ({ postId }: { postId: string }) => {

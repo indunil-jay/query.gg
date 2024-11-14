@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/command";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-import { useSearchPosts } from "@/app/posts/_hooks/use-search-posts";
+import { useSearchPosts } from "@/hooks/custom/use-search-posts";
 import { useQueryState } from "nuqs";
 import { IPost } from "@/types/post";
 import { useRouter } from "next/navigation";

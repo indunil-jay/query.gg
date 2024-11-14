@@ -4,7 +4,7 @@ import { Bookmark, MessageCircle, RefreshCcw, Share } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useGetPosts } from "@/app/posts/_hooks/use-get-posts";
+import { useGetPosts } from "@/hooks/custom/use-get-posts";
 import { useState } from "react";
 import { PostCard } from "@/components/post-card";
 

@@ -11,8 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useGetPost } from "@/app/posts/_hooks/use-get-post";
-import { useGetUser } from "@/app/users/_hooks/use-user";
+import { useGetPost } from "@/hooks/custom/use-get-post";
+import { useGetUser } from "@/hooks/custom/use-user";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Comments } from "@/components/comments";
@@ -24,6 +24,7 @@ interface PostProps {
 
 export const Post = ({ id }: PostProps) => {
   const { data, error, isLoading } = useGetPost({ id });
+
   const { data: user, isLoading: isUserLoading } = useGetUser({
     id: data?.userId,
   });
@@ -76,7 +77,7 @@ export const Post = ({ id }: PostProps) => {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="h-80">
+        <CardContent className="h-72">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 h-full">
             <Avatar className="w-full h-full rounded-md">
               <AvatarImage
@@ -90,7 +91,7 @@ export const Post = ({ id }: PostProps) => {
             </Avatar>
 
             <div className="">
-              <ScrollArea className="h-80 rounded-md border p-4">
+              <ScrollArea className="h-72 p-4">
                 <p className="">{data?.body}</p>
               </ScrollArea>
             </div>
