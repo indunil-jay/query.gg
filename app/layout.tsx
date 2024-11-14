@@ -12,6 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { BreadcrumbNav } from "@/components/bread-crumb-nav";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./_fonts/GeistVF.woff",
@@ -56,6 +57,7 @@ export default function RootLayout({
                   </main>
                 </SidebarInset>
               </SidebarProvider>
+              <Toaster />
             </Providers>
           </NuqsAdapter>
         </Suspense>

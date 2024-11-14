@@ -16,6 +16,7 @@ import { useGetUser } from "@/app/users/_hooks/use-user";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Comments } from "@/components/comments";
+import { CopyToClipboardBtn } from "@/components/copy-to-clipboard-btn";
 
 interface PostProps {
   id: string;
@@ -110,10 +111,7 @@ export const Post = ({ id }: PostProps) => {
               <Bookmark className="size-4" />
               bookmark
             </Button>
-            <Button variant={"ghost"} className="">
-              <Share className="size-4" />
-              share
-            </Button>
+            <CopyToClipboardBtn postId={data.id} />
           </div>
         </CardFooter>
       </Card>

@@ -17,6 +17,7 @@ import { IPost } from "@/types/post";
 import { useGetUser } from "@/app/users/_hooks/use-user";
 import { Badge } from "./ui/badge";
 import { Comments } from "./comments";
+import { CopyToClipboardBtn } from "./copy-to-clipboard-btn";
 
 export const PostCard = ({ post }: { post: IPost }) => {
   const { data: user, isLoading } = useGetUser({ id: post.userId });
@@ -77,10 +78,7 @@ export const PostCard = ({ post }: { post: IPost }) => {
             <Bookmark className="size-4" />
             bookmark
           </Button>
-          <Button variant={"ghost"} size={"sm"}>
-            <Share className="size-4" />
-            share
-          </Button>
+          <CopyToClipboardBtn postId={post.id} />
         </div>
       </CardFooter>
     </Card>
