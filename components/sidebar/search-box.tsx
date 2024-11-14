@@ -10,11 +10,12 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Badge } from "../ui/badge";
+
 import { useSearchPosts } from "@/app/posts/_hooks/use-search-posts";
 import { useQueryState } from "nuqs";
 import { IPost } from "@/types/post";
 import { useRouter } from "next/navigation";
+import { SearchResultItem } from "./search-result-item";
 
 const MAX_RECENT_ITEMS = 3;
 
@@ -113,32 +114,7 @@ export function SearchBox() {
                   key={post.id}
                   onSelect={() => handleSelect(post.id)}
                 >
-                  <div className="flex gap-3 items-center">
-                    <Avatar>
-                      <AvatarImage
-                        src={"https://github.com/shadcn.png"}
-                        alt={post.title}
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="space-y-1">
-                      <p className="font-semibold leading-none">{post.title}</p>
-                      <p className="line-clamp-1 text-[10px] leading-none">
-                        written by • {"Unknown"}
-                      </p>
-                      <div className="flex gap-2">
-                        {Array.from({ length: 4 }, (_, index) => (
-                          <Badge
-                            key={index}
-                            variant="outline"
-                            className="text-[10px] font-medium rounded-lg leading-relaxed px-2 py-0"
-                          >
-                            #Badge
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <SearchResultItem post={post} />
                 </CommandItem>
               ))
             )}
@@ -151,21 +127,7 @@ export function SearchBox() {
                   key={post.id}
                   onSelect={() => handleSelect(post.id)}
                 >
-                  <div className="flex gap-3 posts-center">
-                    <Avatar>
-                      <AvatarImage
-                        src={"https://github.com/shadcn.png"}
-                        alt={post.title}
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="space-y-1">
-                      <p className="font-semibold leading-none">{post.title}</p>
-                      <p className="line-clamp-1 text-[10px] leading-none">
-                        written by • {"Unknown"}
-                      </p>
-                    </div>
-                  </div>
+                  <SearchResultItem post={post} />
                 </CommandItem>
               ))
             ) : (

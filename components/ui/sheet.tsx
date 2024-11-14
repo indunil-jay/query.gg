@@ -6,6 +6,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { DialogDescription, DialogTitle } from "./dialog";
 
 const Sheet = SheetPrimitive.Root;
 
@@ -59,6 +61,11 @@ const SheetContent = React.forwardRef<
 >(({ side = "right", className, children, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
+    {/* fix dialog title unused pop-up error */}
+    <VisuallyHidden>
+      <DialogTitle>Menu</DialogTitle>
+      <DialogDescription>description</DialogDescription>
+    </VisuallyHidden>
     <SheetPrimitive.Content
       ref={ref}
       className={cn(sheetVariants({ side }), className)}
