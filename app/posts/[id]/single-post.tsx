@@ -14,6 +14,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGetPost } from "@/app/posts/_hooks/use-get-post";
 import { useGetUser } from "@/app/users/_hooks/use-user";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { Comments } from "@/components/comments";
 
 interface PostProps {
   id: string;
@@ -95,10 +97,15 @@ export const Post = ({ id }: PostProps) => {
         </CardContent>
         <CardFooter className="px-3.5 pt-2.5  flex justify-end ">
           <div className="flex">
-            <Button variant={"ghost"} className="">
-              <MessageCircle className="size-4" />
-              comments
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant={"ghost"} size={"sm"}>
+                  <MessageCircle className="size-4" />
+                  comments
+                </Button>
+              </PopoverTrigger>
+              <Comments postId={data.id} />
+            </Popover>
             <Button variant={"ghost"} className="">
               <Bookmark className="size-4" />
               bookmark

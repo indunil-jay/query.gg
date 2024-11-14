@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import {
   Card,
   CardContent,
@@ -15,6 +16,7 @@ import { Bookmark, MessageCircle, Share } from "lucide-react";
 import { IPost } from "@/types/post";
 import { useGetUser } from "@/app/users/_hooks/use-user";
 import { Badge } from "./ui/badge";
+import { Comments } from "./comments";
 
 export const PostCard = ({ post }: { post: IPost }) => {
   const { data: user, isLoading } = useGetUser({ id: post.userId });
@@ -61,10 +63,16 @@ export const PostCard = ({ post }: { post: IPost }) => {
       </CardContent>
       <CardFooter className="px-3.5 py-1  flex justify-end">
         <div className="flex">
-          <Button variant={"ghost"} size={"sm"}>
-            <MessageCircle className="size-4" />
-            comments
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant={"ghost"} size={"sm"}>
+                <MessageCircle className="size-4" />
+                comments
+              </Button>
+            </PopoverTrigger>
+            <Comments postId={post.id} />
+          </Popover>
+
           <Button variant={"ghost"} size={"sm"}>
             <Bookmark className="size-4" />
             bookmark
