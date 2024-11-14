@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUser } from "@/hooks/custom/use-user";
 import { IComment, ICommentResponse } from "@/types/comment";
 import { Loader } from "lucide-react";
+import { Error } from "./error";
 
 interface CommentProps {
   commentsResponse: ICommentResponse;
@@ -26,58 +27,60 @@ export const Comments = ({
     );
   }
 
-  if (isCommentsPending) {
-    return (
-      <PopoverContent align="center" className="w-96">
-        <p className="text-sm font-medium text-muted-foreground">
-          Comments ( <Loader className="animate-spin" />)
-        </p>
-        <ScrollArea className="h-[200px] p-4">
-          <div className="space-y-3">
-            <Loader className="animate-spin" />
-          </div>
-        </ScrollArea>
-      </PopoverContent>
-    );
-  }
   return (
     <PopoverContent align="center" className="w-96">
       <p className="text-sm font-medium text-muted-foreground">
-        Comments ({commentsResponse.total})
+        Comments (
+        {isCommentsPending ? (
+          <Loader className="animate-spin size-7" />
+        ) : (
+          commentsResponse.total
+        )}
+        )
       </p>
       <ScrollArea className="h-[200px] p-4">
-        <div className="space-y-3">
-          {commentsResponse.comments.map((comment) => (
-            <CommentCard key={comment.id} comment={comment} />
-          ))}
-        </div>
+        {isCommentsPending ? (
+          "loding"
+        ) : (
+          <div className="space-y-3">
+            {commentsResponse.comments.map((comment) => (
+              <CommentCard key={comment.id} comment={comment} />
+            ))}
+          </div>
+        )}
       </ScrollArea>
     </PopoverContent>
   );
 };
 
 export const CommentCard = ({ comment }: { comment: IComment }) => {
-  const { data: user, isLoading } = useUser({ id: comment.user.id });
-  if (!user) return;
+  const { data: user, isLoading, status } = useUser({ id: comment.user.id });
+  if (status === "error") {
+    return <Error />;
+  }
   return (
     <div className="space-y-2">
-      <div className="flex gap-3 items-center">
-        <Avatar>
-          <AvatarImage src={user.image} alt={user.firstName} />
-          <AvatarFallback className="font-semibold">
-            {user.firstName.charAt(0).toUpperCase() +
-              user.lastName.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <div className="space-y-1">
-          <p className="line-clamp-1 font-semibold text-sm leading-none capitalize tracking-wide">
-            {comment.user.fullName}
-          </p>
-          <p className="line-clamp-1 text-xs leading-none text-muted-foreground">
-            {user.email}
-          </p>
+      {isLoading || status === "pending" ? (
+        <Loader className="animate-spin size-7" />
+      ) : (
+        <div className="flex gap-3 items-center">
+          <Avatar>
+            <AvatarImage src={user.image} alt={user.firstName} />
+            <AvatarFallback className="font-semibold">
+              {user.firstName.charAt(0).toUpperCase() +
+                user.lastName.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="space-y-1">
+            <p className="line-clamp-1 font-semibold text-sm leading-none capitalize tracking-wide">
+              {comment.user.fullName}
+            </p>
+            <p className="line-clamp-1 text-xs leading-none text-muted-foreground">
+              {user.email}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
       <p className="text-xs text-primary/80">{comment.body}</p>
     </div>
   );

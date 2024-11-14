@@ -21,18 +21,20 @@ import { Comments } from "@/components/comments";
 import { CopyToClipboardBtn } from "@/components/copy-to-clipboard-btn";
 import { usePostDetails } from "../_hooks/use-post-details";
 import { useUser } from "@/hooks/custom/use-user";
-import { usePost } from "@/hooks/custom/use-post";
+import { Spinner } from "@/components/loader";
 
 export const Post = ({ postId }: { postId: string }) => {
-  // const {
-  //   post,
-  //   comments,
-  //   isCommentsError,
-  //   isCommentsPending,
-  //   isPostPending,
-  //   postStatus,
-  // } = usePostDetails({ postId });
-  const { data: post, isPlaceholderData, isError } = usePost({ postId });
+  const {
+    post,
+    comments,
+    isCommentsError,
+    isCommentsPending,
+    isPostPending,
+    postStatus,
+  } = usePostDetails({ postId });
+
+  //prefetching
+  //const { data: post, isPlaceholderData, isError } = usePost({ postId });
 
   const {
     data: user,
@@ -42,7 +44,9 @@ export const Post = ({ postId }: { postId: string }) => {
     id: post?.id,
   });
 
-  if (isError) return "Error";
+  if (postStatus === "error") return "Error";
+
+  if (postStatus === "pending" || isPostPending) return <Spinner />;
 
   if (!post) return;
 
@@ -104,11 +108,12 @@ export const Post = ({ postId }: { postId: string }) => {
 
             <div className="">
               <ScrollArea className="h-72 p-4">
-                {isPlaceholderData ? (
+                {/* {isPlaceholderData ? (
                   <Loader className="animate-spin" />
                 ) : (
                   <p className="">{post?.body}</p>
-                )}
+                )} */}
+                <p className="">{post?.body}</p>
               </ScrollArea>
             </div>
           </div>
@@ -122,7 +127,7 @@ export const Post = ({ postId }: { postId: string }) => {
                   comments
                 </Button>
               </PopoverTrigger>
-              {/* {!comments ? (
+              {!comments ? (
                 <PopoverContent align="center" className="w-96">
                   <p className="text-sm font-medium text-muted-foreground">
                     No Comments
@@ -134,7 +139,7 @@ export const Post = ({ postId }: { postId: string }) => {
                   isCommentsError={isCommentsError}
                   isCommentsPending={isCommentsPending}
                 />
-              )} */}
+              )}
             </Popover>
             <Button variant={"ghost"} className="">
               <Bookmark className="size-4" />

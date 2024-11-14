@@ -20,7 +20,7 @@ export const usePost = ({ postId }: { postId: string }) => {
   return useQuery({
     ...getPost(postId),
     initialData: () => {
-      console.log("cache query:", queryClient.getQueryData(["posts"]));
+      // console.log("cache query:", queryClient.getQueryData(["posts"]));
       return (queryClient.getQueryData(["posts"]) as IPost[])?.find(
         (post) => post.id === postId
       );
