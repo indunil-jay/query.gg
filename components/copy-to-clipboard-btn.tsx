@@ -1,15 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
 import { CopyCheck, Share } from "lucide-react";
+
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export const CopyToClipboardBtn = ({ postId }: { postId: string }) => {
   const [isCopied, setIsCopied] = useState(false);
+  const origin =
+    typeof window !== "undefined" && window.location.origin
+      ? window.location.origin
+      : "";
 
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText(`http://localhost:3000/posts/${postId}`)
+      .writeText(`${origin}/posts/${postId}`)
       .then(() => {
         setIsCopied(true);
         toast("URL text has been copied", {

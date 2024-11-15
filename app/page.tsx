@@ -74,6 +74,7 @@ export default function Page() {
       </div>
       <footer className="h-16 px-4 w-full bg-white flex-grow-0 flex items-center justify-center">
         <PaginationBar
+          isPlaceholderData={isPlaceholderData}
           limit={postQueryData.limit}
           totalPages={Math.ceil(Number(postQueryData.total) / 9)}
         />

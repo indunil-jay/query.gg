@@ -14,9 +14,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 interface PaginationBarProps {
   limit: number;
   totalPages: number;
+  isPlaceholderData: boolean;
 }
 
-export const PaginationBar = ({ limit, totalPages }: PaginationBarProps) => {
+export const PaginationBar = ({
+  limit,
+  totalPages,
+  isPlaceholderData,
+}: PaginationBarProps) => {
   const [page] = useQueryState("page", { defaultValue: "1" });
   const isMobile = useIsMobile();
 
@@ -59,10 +64,12 @@ export const PaginationBar = ({ limit, totalPages }: PaginationBarProps) => {
           >
             <Link
               href={pageHref(prevPage)}
-              aria-disabled={currentPage <= 1}
+              aria-disabled={currentPage <= 1 || isPlaceholderData}
               tabIndex={currentPage <= 1 ? -1 : undefined}
               className={
-                currentPage <= 1 ? " opacity-50 cursor-not-allowed" : undefined
+                currentPage <= 1 || isPlaceholderData
+                  ? " opacity-50 cursor-not-allowed"
+                  : undefined
               }
             >
               {isMobile ? (
@@ -120,10 +127,10 @@ export const PaginationBar = ({ limit, totalPages }: PaginationBarProps) => {
           >
             <Link
               href={pageHref(nextPage)}
-              aria-disabled={currentPage >= totalPages}
+              aria-disabled={currentPage >= totalPages || isPlaceholderData}
               tabIndex={currentPage >= totalPages ? -1 : undefined}
               className={
-                currentPage >= totalPages
+                currentPage >= totalPages || isPlaceholderData
                   ? " opacity-50 cursor-not-allowed"
                   : undefined
               }
