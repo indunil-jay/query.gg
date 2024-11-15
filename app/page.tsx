@@ -2,13 +2,14 @@
 
 import { RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { PostCard } from "@/components/post-card";
 import { Spinner } from "@/components/loader";
 import { Error } from "@/components/error";
 import { usePosts } from "@/hooks/custom/use-posts";
+import { PaginationBar } from "@/components/pagination-bar";
 
 export default function Page() {
   const {
@@ -18,6 +19,7 @@ export default function Page() {
     isFetching,
     refetch,
   } = usePosts();
+
   const [lastFetched, setLastFetched] = useState(new Date());
 
   if (status === "pending" || isLoading) {
@@ -59,9 +61,11 @@ export default function Page() {
           ))}
         </div>
       </div>
-      <footer className="h-16 px-4 w-full bg-white flex-grow-0">
-        {/* pagination */}
-        pagination footer
+      <footer className="h-16 px-4 w-full bg-white flex-grow-0 flex items-center justify-center">
+        <PaginationBar
+          limit={postQueryData.limit}
+          totalPages={Math.ceil(Number(postQueryData.total) / 9)}
+        />
       </footer>
     </>
   );
