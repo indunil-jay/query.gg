@@ -14,6 +14,8 @@ import { BreadcrumbNav } from "@/components/bread-crumb-nav";
 import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 
+import { Tabs } from "@/components/tabs";
+
 const geistSans = localFont({
   src: "./_fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -45,14 +47,18 @@ export default function RootLayout({
               <SidebarProvider>
                 <AppSidebar />
                 <SidebarInset>
-                  <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50">
+                  <header className="sticky top-0 flex justify-between h-14 shrink-0 items-center gap-2 bg-background z-50">
                     <div className="flex flex-1 items-center gap-2 px-3">
                       <SidebarTrigger />
                       <Separator orientation="vertical" className="mr-2 h-4" />
                       <BreadcrumbNav />
                     </div>
+
+                    <div className="pr-6">
+                      <Tabs />
+                    </div>
                   </header>
-                  <main className="bg-muted min-h-[calc(100vh-56px)] flex flex-col justify-between">
+                  <main className="bg-muted min-h-[calc(100vh-56px)] flex flex-col">
                     {children}
                   </main>
                 </SidebarInset>

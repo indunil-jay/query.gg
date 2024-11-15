@@ -28,7 +28,7 @@ export const PaginationBar = ({
   const currentPage = parseInt(page);
   const nextPage = currentPage < totalPages ? currentPage + 1 : totalPages;
   const prevPage = currentPage > 1 ? currentPage - 1 : 1;
-  const pageHref = (pageNum: number) => `/?page=${pageNum}&limit=${limit}`;
+  const pageHref = (pageNum: number) => `/posts?page=${pageNum}&limit=${limit}`;
   const renderPageLink = (pageNum: number) => (
     <PaginationItem key={pageNum}>
       <Button
