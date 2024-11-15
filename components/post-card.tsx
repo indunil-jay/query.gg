@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { Loader } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 import {
   Card,
@@ -12,11 +14,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IPost } from "@/types/post";
 import { useUser } from "@/hooks/custom/use-user";
-import { Badge } from "./ui/badge";
-import { CopyToClipboardBtn } from "./copy-to-clipboard-btn";
-import { Error } from "./error";
-import { Loader } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { Badge } from "@/components/ui/badge";
+import { CopyToClipboardBtn } from "@/components/copy-to-clipboard-btn";
+import { Error } from "@/components/error";
 import { getPost } from "@/hooks/custom/use-post";
 
 export const PostCard = ({ post }: { post: IPost }) => {

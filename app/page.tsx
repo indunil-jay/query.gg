@@ -1,8 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { PostCard } from "@/components/post-card";
@@ -15,14 +15,19 @@ export default function Page() {
   const {
     data: postQueryData,
     status,
-    isLoading,
     isFetching,
     refetch,
+    isPlaceholderData,
   } = usePosts();
-
   const [lastFetched, setLastFetched] = useState(new Date());
 
-  if (status === "pending" || isLoading) {
+  useEffect(() => {
+    if (status === "success" && !isFetching && !isPlaceholderData) {
+      setLastFetched(new Date());
+    }
+  }, [status, isFetching, isPlaceholderData]);
+
+  if (status === "pending") {
     return <Spinner />;
   }
 
@@ -43,7 +48,7 @@ export default function Page() {
     <>
       <div className="p-4 space-y-2 flex flex-1  flex-col">
         <div className="flex items-center space-x-2 bg-white  self-end   rounded-md px-3 ">
-          <p className="text-sm">
+          <p className="text-xs  lg:text-sm ">
             Last updated • {lastFetched.toLocaleString()}
           </p>
           <Button
@@ -55,7 +60,13 @@ export default function Page() {
             <RefreshCcw className={cn("ml-1", isFetching && "animate-spin")} />
           </Button>
         </div>
-        <div className="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-3 content-center">
+
+        <div
+          className={cn(
+            "grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-3 content-center",
+            isPlaceholderData ? "opacity-50" : "opacity-100"
+          )}
+        >
           {postQueryData.posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
