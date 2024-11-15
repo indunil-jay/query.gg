@@ -21,7 +21,7 @@ export const CopyToClipboardBtn = ({ postId }: { postId: string }) => {
           },
         });
       })
-      .catch((err) => {
+      .catch(() => {
         toast("something went wrong", {
           description: "URL is not copied to clipboard.",
           action: {

@@ -17,7 +17,7 @@ export const SearchResultItem = ({ post }: { post: IPost }) => {
       <div className="space-y-1">
         <p className="font-semibold leading-none">{post.title}</p>
         <p className="line-clamp-1 text-[10px] leading-none">
-          written by • {fullName}
+          written by • {isLoading ? "loading" : fullName}
         </p>
         <div className="flex gap-2">
           {post.tags.map((tag) => (

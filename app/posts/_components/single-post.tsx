@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, Loader, MessageCircle } from "lucide-react";
+import { Bookmark, MessageCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -89,7 +89,9 @@ export const Post = ({ postId }: { postId: string }) => {
               <p className="font-semibold text-sm capitalize text-muted-foreground">
                 {fullName}
               </p>
-              <p className="text-xs text-muted-foreground/70">{user?.email}</p>
+              <p className="text-xs text-muted-foreground/70">
+                {isUserLoading ? "loading" : user?.email}
+              </p>
             </div>
           </div>
         </CardHeader>
