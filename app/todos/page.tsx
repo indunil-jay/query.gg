@@ -1,79 +1,83 @@
 "use client";
+
 import { useTodos } from "@/hooks/custom/use-todos";
-import { TodoCard } from "./_components/todo-card";
 import { Loader } from "lucide-react";
-import { useIntersectionObserver } from "@/hooks/use-intersectionObserver";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useInView } from "react-intersection-observer";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ITodo } from "@/types/todo";
+import { TodoCard } from "./_components/todo-card";
 
 export default function Page() {
   const {
     data,
     fetchNextPage,
+    fetchPreviousPage,
     status,
     hasNextPage,
+    hasPreviousPage,
     isFetchingNextPage,
     isFetchingPreviousPage,
-    fetchPreviousPage,
-    hasPreviousPage,
   } = useTodos();
 
-  const { isIntersecting: isIntersectingBottom, ref: bottomRef } =
-    useIntersectionObserver({
-      threshold: 0.5,
-    });
-  console.log(isIntersectingBottom);
-
-  const { isIntersecting: isIntersectingTop, ref: topRef } =
-    useIntersectionObserver({
-      threshold: 0.5,
-    });
+  // Intersection observers for top and bottom
+  const { ref: bottomRef, inView: bottomInView } = useInView({
+    triggerOnce: false,
+    threshold: 1.0, // Trigger when fully in view
+  });
+  const { ref: topRef, inView: topInView } = useInView({
+    triggerOnce: false,
+    threshold: 1.0,
+  });
 
   useEffect(() => {
-    if (isIntersectingBottom && hasNextPage && !isFetchingNextPage) {
+    if (bottomInView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [isIntersectingBottom, hasNextPage, isFetchingNextPage]);
+  }, [bottomInView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {
-    if (isIntersectingTop && hasPreviousPage && !isFetchingPreviousPage) {
+    if (topInView && hasPreviousPage && !isFetchingPreviousPage) {
       fetchPreviousPage();
     }
-  }, [isIntersectingTop, hasPreviousPage, isFetchingPreviousPage]);
+  }, [topInView, hasPreviousPage, isFetchingPreviousPage, fetchPreviousPage]);
 
-  if (status === "pending") return "pending";
-  if (status === "error") return "error";
+  if (status === "pending") return <p>Loading...</p>;
+  if (status === "error") return <p>Error fetching todos</p>;
 
-  const todos = [...data.pages.flatMap((page) => page.todos)];
+  // Flatten and combine all pages of todos
+  const todos = data.pages.flatMap((page) => page.todos);
 
   return (
     <div className="p-4">
-      <div ref={topRef}>
+      {/* Top Loader */}
+      <div className="mb-4" ref={hasPreviousPage ? topRef : null}>
         {isFetchingPreviousPage ? (
           <Loader className="animate-spin" />
         ) : hasPreviousPage ? (
           <Loader className="animate-spin" />
         ) : (
-          "you are in top"
+          <p>You're at the top!</p>
         )}
       </div>
 
+      {/* Todos List */}
       <div className="space-y-6">
         {todos.map((todo, index) => (
-          <TodoCard key={index} todo={todo} />
+          <TodoCard key={todo.id} todo={todo} />
         ))}
       </div>
-      {hasNextPage ? (
-        <>
-          {isFetchingNextPage ? (
-            <Loader className="animate-spin" />
-          ) : (
-            <div ref={bottomRef} />
-          )}
-        </>
-      ) : (
-        <Button>Back to Top</Button>
-      )}
+
+      {/* Bottom Loader */}
+      <div className="mt-4" ref={hasNextPage ? bottomRef : null}>
+        {isFetchingNextPage ? (
+          <Loader className="animate-spin" />
+        ) : hasNextPage ? (
+          <Loader className="animate-spin" />
+        ) : (
+          <p>You've reached the bottom!</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,23 +1,35 @@
-import { ITodoResponse } from "@/types/todo";
+import { ITodo, ITodoResponse } from "@/types/todo";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export const MAX_TODO_PER_PAGE: number = 18;
+export const MAX_TODO_PER_PAGE = 15;
 
-const getTodos = async (page: number) => {
+interface PaginatedTodos {
+  todos: ITodo[];
+  currentPage: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+const getTodos = async (page: number): Promise<PaginatedTodos> => {
   const response = await fetch(
     `https://dummyjson.com/todos?limit=${MAX_TODO_PER_PAGE}&skip=${
       (page - 1) * MAX_TODO_PER_PAGE
     }`
   );
+
   if (!response.ok) {
     throw new Error("Failed to fetch todos");
   }
-  const data = (await response.json()) as ITodoResponse;
-  const totalPages = Math.ceil(data.total / MAX_TODO_PER_PAGE);
-  const currentPage = page;
-  const totalItems = data.total;
-  const todos = data.todos;
-  return { todos, currentPage, totalItems, totalPages };
+
+  const data: ITodoResponse = await response.json();
+  const totalPages = Math.ceil(data.total / data.limit);
+
+  return {
+    todos: data.todos,
+    currentPage: Math.floor(data.skip / data.limit) + 1,
+    totalItems: data.total,
+    totalPages,
+  };
 };
 
 export const useTodos = () =>
@@ -25,22 +37,13 @@ export const useTodos = () =>
     queryKey: ["todos"],
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getTodos(pageParam),
-    getNextPageParam: (
-      { currentPage, totalPages },
-      allPages,
-      lastPageParam
-    ) => {
-      const nextPage = currentPage + 1;
-      if (nextPage > totalPages) {
-        return undefined;
-      }
-      return lastPageParam + 1;
+    getNextPageParam: (lastPage) => {
+      const { currentPage, totalPages } = lastPage;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
     },
-    getPreviousPageParam: ({ currentPage }, allPages, firstPageParam) => {
-      if (firstPageParam <= 1) {
-        return undefined;
-      }
-      return firstPageParam - 1;
+    getPreviousPageParam: (firstPage) => {
+      const { currentPage } = firstPage;
+      return currentPage > 1 ? currentPage - 1 : undefined;
     },
     maxPages: 3,
   });
