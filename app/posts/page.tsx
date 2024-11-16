@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { RefreshCcw } from "lucide-react";
+import { PlusCircleIcon, RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { Error } from "@/components/error";
 import { usePosts } from "@/hooks/custom/use-posts";
 import { PaginationBar } from "@/components/pagination-bar";
 import { TabsContent } from "@/components/ui/tabs";
+import { AddNewPost } from "./_components/add-new-post";
 
 export default function Page() {
   const {
@@ -48,18 +49,23 @@ export default function Page() {
   return (
     <>
       <div className="p-4 space-y-2 flex flex-1  flex-col">
-        <div className="flex items-center space-x-2 bg-white  self-end   rounded-md px-3 ">
-          <p className="text-xs  lg:text-sm ">
-            Last updated • {lastFetched.toLocaleString()}
-          </p>
-          <Button
-            variant={"ghost"}
-            onClick={handleRefetch}
-            className="flex items-center bg-transparent hover:bg-transparent"
-          >
-            Refresh{" "}
-            <RefreshCcw className={cn("ml-1", isFetching && "animate-spin")} />
-          </Button>
+        <div className="flex gap-3  flex-col md:justify-between ">
+          <AddNewPost />
+          <div className="flex items-center space-x-2 bg-white  self-end   rounded-md px-3">
+            <p className="text-xs  lg:text-sm ">
+              Last updated • {lastFetched.toLocaleString()}
+            </p>
+            <Button
+              variant={"ghost"}
+              onClick={handleRefetch}
+              className="flex items-center bg-transparent hover:bg-transparent"
+            >
+              Refresh{" "}
+              <RefreshCcw
+                className={cn("ml-1", isFetching && "animate-spin")}
+              />
+            </Button>
+          </div>
         </div>
 
         <div

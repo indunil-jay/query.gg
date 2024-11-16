@@ -63,7 +63,7 @@ export default function Page() {
 
       {/* Todos List */}
       <div className="space-y-6">
-        {todos.map((todo, index) => (
+        {todos.map((todo) => (
           <TodoCard key={todo.id} todo={todo} />
         ))}
       </div>
