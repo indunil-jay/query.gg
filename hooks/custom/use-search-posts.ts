@@ -7,9 +7,10 @@ export const useSearchPosts = () => {
 
   return useQuery({
     queryKey: ["posts:search", query],
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const response = await fetch(
-        `https://dummyjson.com/posts/search?q=${query}&limit=5`
+        `https://dummyjson.com/posts/search?q=${query}&limit=5`,
+        { signal }
       );
       if (!response.ok) {
         throw new Error("Error fetching data");

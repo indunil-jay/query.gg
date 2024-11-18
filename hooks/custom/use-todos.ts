@@ -37,13 +37,17 @@ export const useTodos = () =>
     queryKey: ["todos"],
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getTodos(pageParam),
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
       const { currentPage, totalPages } = lastPage;
-      return currentPage < totalPages ? currentPage + 1 : undefined;
+      if (currentPage === totalPages) return undefined;
+      return lastPageParam + 1;
     },
-    getPreviousPageParam: (firstPage) => {
-      const { currentPage } = firstPage;
-      return currentPage > 1 ? currentPage - 1 : undefined;
+    getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
+      if (firstPageParam <= 1) {
+        return undefined;
+      }
+
+      return firstPageParam - 1;
     },
     maxPages: 3,
   });
