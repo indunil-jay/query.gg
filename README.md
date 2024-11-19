@@ -6,7 +6,7 @@
 
 > All you have to do is worry about how the state in your application changes, and React will handle the rest.The primary mode of encapsulation for this concept is the component – which encapsulates both the visual representation of a particular piece of UI as well as the state and logic that goes along with it.
 
-<div style="text-align: center;">
+<div align="center">
   <img src="./docs//images/traditional-model-vs-react.png" alt="Image Description" width="400">
 </div>
 
@@ -350,7 +350,7 @@ export default function App () {
 > Now if you're an experienced React dev, you might be thinking that if the problem is that we're fetching the same data multiple times, can'?t we just move that state up to the nearest parent component and pass it down via props?
 > Or better, put the fetched data on context so that it's available to any component that needs it?
 
-<div style="text-align: center;">
+<div align="center">
   <img src="./docs/images/multiple-data-instace.png" alt="data-fetching" >
 </div>
 
@@ -473,12 +473,59 @@ That couldn't be further from the truth. In fact...
 
 > And that's a good thing! Because it should be clear by now that data fetching itself is not the hard part - it's managing that data over time that is.
 
-> And while React Query goes very well with data fetching, <p style="font-size:32px;font-style:italic; font-weight:bold; text-decoration:underline;"> Better way to describe it is as an async state manager that is also acutely aware of the needs of server state.</p>
+> And while React Query goes very well with data fetching, <ins align="center"  > Better way to describe it is as an async state manager that is also acutely aware of the needs of server state.</ins>
 
 > In fact, React Query doesn't even fetch any data for you. You provide it a promise (whether from `fetch`, `axios`, `graphql`, `IndexedDB`, etc.), and React Query will then take the data that the promise resolves with and make it available wherever you need it throughout your entire application.
 
 > From there, it can handle all of the dirty work that you're either unaware of, or you shouldn't be thinking about.
 
-<div style="text-align: center;">
+<div align="center">
   <img src="./docs/images/react-query-provides-us.png" alt="react-query-provides" >
 </div>
+
+## Configuration
+
+`npm i @tanstack/react-query `
+
+Next up is the heart of React Query, the QueryClient.
+
+```JS
+import { QueryClient } from '@tanstack/react-query'
+
+...
+
+const queryClient = new QueryClient(options)
+
+
+```
+
+> What makes the `QueryClient` so important is that it contains and manages the `QueryCache` - the location where all of the `data lives`. Without that `cache`, most of the features that make React Query a joy to use wouldn't work and it's via the `QueryClient` that you interact with the cache.
+> If it helps, you can imagine the `QueryCache` as an `in-memory JavaScript Map` - because that's exactly what it is under the hood.
+
+> One thing to note about QueryClient is you need to make sure that you create it outside of your most parent React component. This makes sure your cache stays stable even as your application re-renders.
+
+> However, because the QueryClient is created and located outside of React, you'll then need a way to distribute it throughout your application so that you can interact with it from any compone
+
+```JS
+
+import {QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
+
+export default function App () {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  )
+}
+
+```
+
+> By wrapping your main parent component in the QueryClientProvider and passing the queryClient as a prop, React Query seamlessly provides access to the query cache across your component tree.
+> This is made possible by React Query’s use of React Context—not for state management, but for dependency injection. The QueryClient is a static object, meaning it doesn’t change and won’t trigger unnecessary re-renders. This allows you to efficiently interact with the cache and manage your queries throughout the application.
+
+> With React Query, you can achieve two primary goals:
+
+1. [Querying data](./docs/query.md)
+2. [Mutating data](./docs/mutation.md)
